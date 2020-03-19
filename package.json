@@ -22,6 +22,9 @@
     "react-sidebar": "^3.0.2",
     "reactstrap": "^8.1.1"
   },
+  "engines": {
+    "node": "12.13.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
