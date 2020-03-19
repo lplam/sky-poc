@@ -1,0 +1,198 @@
+import React, {Component} from "react";
+import {Link} from "react-router-dom";
+import {Redirect} from "react-router-dom";
+import Avatar from 'react-avatar';
+import '../../App.css'
+
+class AdminPage extends Component{
+
+    constructor(props) {
+        super(props);
+       
+       
+        var Resources=(window.location.pathname === "/products")? "alway actived":"alway";
+        var products=window.location.pathname === "/introduce"? "alway actived":"alway";
+        var Dashboard=window.location.pathname === "/dashboard"? "alway actived":"alway";;
+        this.state={
+          maccount :JSON.parse(localStorage.getItem('laccount')) || '',
+          mpassword: JSON.parse(localStorage.getItem('lpassword')) || '',
+          user: localStorage.getItem('user'),
+          facebookuser: localStorage.getItem('FacebookUser'),
+          googleuser: localStorage.getItem("GoogleUser"),
+          redirect: false,
+          data: this.props.data,
+          products,
+          Dashboard,
+          Resources,
+        };
+      }
+      
+    onClick_LogOutOrSignUp = ()=>{
+        if(this.state.user || this.state.facebookuser || this.state.googleuser)
+        {
+        localStorage.clear();
+        this.setState({
+            redirect: true,
+            
+        })
+        localStorage.setItem("logout", true);
+    }
+    }
+
+
+    RenderRedirect = ()=>{
+        if(this.state.redirect)
+          {
+              return <Redirect to='/'></Redirect>
+            }
+      }
+
+    products=()=>{
+        this.setState({
+            products: "alway actived",
+          Dashboard: "alway",
+          Resources: "alway",
+          Contacts: "alway",
+          about: "alway",
+          docs: "alway"
+        })
+    }
+
+    Resources=()=>{
+        this.setState({
+            products: "alway",
+            Dashboard: "alway",
+          Resources: "alway actived",
+          Contacts: "alway",
+          about: "alway",
+          docs: "alway"
+        })
+    }
+
+    Dashboard=()=>{
+        this.setState({
+            products: "alway",
+            Dashboard: "alway actived",
+          Resources: "alway",
+          Contacts: "alway",
+          about: "alway",
+          docs: "alway"
+        })
+    }
+
+    profile=()=>{
+        localStorage.setItem("profile", "active");
+        localStorage.removeItem("change");
+    }
+
+    change=()=>{
+        localStorage.setItem("change", "active");
+        localStorage.removeItem("profile");
+    }
+
+
+    render(){
+        var name='Login';
+        var log_out='Sign Up';
+        var link='resgister';
+        var iconlogin_profile="fa fa-sign-in";
+        var iconsingup_logout="fa fa-user-plus";
+        var substring='';
+        var avatar='./servicesStyle/images/avatar.png';
+        log_out='Log out';
+        iconsingup_logout="fa fa-sign-out";
+        link='';
+        if(this.state.user)
+        {
+            substring=this.state.user;
+            name=localStorage.getItem('name');
+            iconlogin_profile="fa fa-user";
+            avatar=localStorage.getItem("avatar");
+        }
+        if(localStorage.getItem("facebook"))
+        {
+            iconlogin_profile="fa fa-facebook-official";
+        }
+
+        if(localStorage.getItem("google"))
+        {
+           
+            iconlogin_profile="fa fa-google";
+            
+        }
+       
+  
+
+        return(
+                
+                <div id="padding-sticky" className="header" style={{display: `${this.props.display}`}}>
+                    <div id="sticky-header" >
+                            <div id="branding" >
+                                <img alt = "Image" src="./signupstyle/images/logo.png" className = "logo"/>
+                            </div>
+                            <input className = "chek" id = "chek" type = "checkbox"/>  
+                            {/* <label htmlFor = "chek">1</label> */}
+                            <label htmlFor = "chek" className = "menu-btn-shows" id = "menu-btn-show">
+                            <i class="fa fa-bars menu-btn-show"></i>
+                          </label>
+                        <nav id = "togle" className = "togle2">
+                        <ul htmlFor = "chek" id = "res">
+                          
+                            <li htmlFor = "chek" className={this.state.Dashboard} onClick={this.Dashboard} style = {{fontWeight: "bold"}}><Link to = "/UserManagement">User Management</Link></li>
+
+                            <li className={this.state.products} onClick={this.products} style = {{fontWeight: "bold"}}><Link to = "/KeyManagement">Key Management</Link>
+                
+                            </li>
+                            <li className={this.state.Resources} onClick={this.Resources} style = {{fontWeight: "bold"}}><Link to = "/MailManagement">Mail Management</Link></li>
+
+                            <label htmlFor = "chek" id = "menu-close">
+                                <i class="fa fa-times menu-close"></i> 
+                            </label>
+                            <div id = "btn-profile-menu">
+                                <Link htmlFor = "chek" to ={`/${name}`} onClick = {this.profile}>
+                                <button  type="button" class="btn btn-success btn-profile-menu">View Your Profile</button>
+                                </Link>
+                                
+                            </div>
+                            <div id = "btn-profile-menu">
+                                <Link to = {`/${link}`} onClick = {this.onClick_LogOutOrSignUp}>
+                                <button type="button" class="btn btn-danger btn-profile-menu">Log out</button>
+                                </Link>                               
+                            </div>
+                            
+
+
+
+                            
+                        </ul>
+                        </nav>
+                        {/* <div className = "toggle"><i className="fa fa-bars menu"></i></div> */}
+                        {this.RenderRedirect()}
+                        <div className = "dropdown">
+                            <Avatar src= {avatar} size="50"  round = {true} className = "avatar-header" style ={{marginTop: '5px'}}/>
+                                <div class="dropdown-content">
+                                    <Link to ={`/${name}`} className = "Link" onClick = {this.profile}><span><i class={iconlogin_profile} aria-hidden="true"></i>{"  "}{name}</span></Link>
+                                    <Link to = {`/${link}`} className = "Link"><span onClick = {this.onClick_LogOutOrSignUp}><i class={iconsingup_logout} aria-hidden="true"></i>{"  "}{log_out}</span></Link>
+                                </div>
+                           </div>
+                           
+
+                          
+                            {/* <span id = "btn-menu-hidden" ><i class="fa fa-bars fa-menu-hidden" aria-hidden="true"></i></span>
+                            <div className= "sticky-header-show-nobackground"></div>    */}
+
+
+                    </div>
+
+                </div>
+        )
+    }
+}
+
+
+
+
+
+
+
+export default AdminPage;
